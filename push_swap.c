@@ -489,16 +489,17 @@ int	sort_smallest_map(t_array *stack)
 }
 
 /**
- * Uses the same pattern as rotate_which on multiple values >=low, moving
- * close to the head of the array the first available biggerthan 2
- * (the biggest value of the 3 map)
+ * Since the biggest problem to efficiency is to move as many unused values
+ * outside the starting array, this function uses the same pattern as
+ * the fn 'rotate_which' on multiple values >=low (3), moving
+ * close to the head of the array the first number available bigger than 2
  *
  * @param a Stack to rotate.
  * @param low Value of the element from wih on we'll bring the closest to edge.
  * @param label the label of the stack we are shifting.
  * @param cls must be initialized as INT_MAX by the caller (NORM)
  */
-int	move_closest_to_edge(t_array *a, int low, char label, int cls)
+int	push_larges_to_head(t_array *a, int low, char label, int cls)
 {
 	t_array	*clone;
 	int		i;
@@ -536,7 +537,7 @@ int sort_small_map(t_array *stack_a, t_array *stack_b)
 		if(stack_a->a[stack_a->l - 1] > 2)
 			total_moves+=p(stack_b, stack_a,'b');
 		else
-			total_moves+=move_closest_to_edge(stack_a, ft_arrfindl(stack_a), 'a', INT_MAX);
+			total_moves+=push_larges_to_head(stack_a, ft_arrfindl(stack_a), 'a', INT_MAX);
 	}
 	if(!ft_arrissorted(stack_a) && stack_a->l == 3)
 		total_moves+=sort_smallest_map(stack_a);
