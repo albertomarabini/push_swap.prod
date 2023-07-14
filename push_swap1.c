@@ -65,23 +65,7 @@ int* createArray(int n) {
 
     return arr;
 }
-// int	main(int argc, char *argv[])
-// {
-// 	int	i;
-// 	int	*numbers;
 
-// 	int argc - 1;
-// 	i = 0;
-// 	if (argc < 2)
-// 		return (1);
-// 	numbers = (int *)malloc((argc - 1) * sizeof(int));
-// 	if (numbers == NULL)
-// 		return (1);
-// 	while (i < argc - 1)
-// 		numbers[i] = atoi(argv[i + 1]);
-// 	free(numbers);
-// 	return (0);
-// }
 
 
 

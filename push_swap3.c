@@ -106,25 +106,8 @@ char	*ft_strnew(size_t size)
 
 
 
-#define STACK_SIZE 100
+#define STACK_SIZE 15
 
-
-
-
-// int findSmallest(int a, int b, int c, int d) {
-//     int smallest = a;
-
-//     if (b < smallest) {
-//         smallest = b;
-//     }
-//     if (c < smallest) {
-//         smallest = c;
-//     }
-//     if (d < smallest) {
-//         smallest = d;
-//     }
-//     return smallest;
-// }
 
 int findSmallest(int a, int b) {
     int smallest = a;
@@ -277,7 +260,7 @@ int	main(void)
 	}
 	int lstackA = STACK_SIZE;
 	int lstackB = 0;
-	int bottomMap = 0;//<----
+	int bottomMap = STACK_SIZE/2 - 1;//<----
 	//int midMap = STACK_SIZE/2 + 1;
 	//int topMap = STACK_SIZE-1;
 	int topMap = STACK_SIZE/2;
@@ -304,15 +287,14 @@ int	main(void)
 			nextOp = "ra";
 		else
 			nextOp = "rra";
-		if (bottomMap >=0 && stackA[lstackA-1] == sortedStack[bottomMap])
+		if (stackA[lstackA-1] == sortedStack[bottomMap])
 		{
 			moveA = "pb";
-			//totalMoves++;
+			totalMoves++;
 			stackB[lstackB] = stackA[lstackA-1];
-			bottomMap++;
+			bottomMap--;
 			lstackA--;
 			lstackB++;
-			//bottomMap++;
 			if (stackB[0] == sortedStack[bottomMap])
 			{
 				rotateLeft(stackB, lstackB, 0,'b');
@@ -321,18 +303,17 @@ int	main(void)
 				totalMoves++;
 				moveB = "sb";
 				rotateRight(stackB, lstackB, 0,'b');
-				bottomMap++;
+				totalMoves++;
+				bottomMap--;
 			}
-
 			rotateRight(stackB, lstackB, 0,'b');
+			totalMoves++;
 			moveB = "rb";
-			//totalMoves++;
 		}
-		//Lock the smallest in the second half
 		else if (topMap <= STACK_SIZE-1 && stackA[lstackA-1] == sortedStack[topMap])
 		{
 			moveA = "pb";
-			//totalMoves++;
+			totalMoves++;
 			stackB[lstackB] = stackA[lstackA-1];
 			if (lstackB>0 && stackB[lstackB] < stackB[lstackB - 1])
 			{
@@ -351,6 +332,7 @@ int	main(void)
 				totalMoves++;
 				moveB = "sb";
 				rotateLeft(stackB, lstackB, 0,'b');
+				totalMoves++;
 				topMap++;
 			}
 			topMap++;
@@ -358,25 +340,23 @@ int	main(void)
 		else if (topMap < STACK_SIZE-1 && stackA[lstackA-1] == sortedStack[topMap + 1])
 		{
 			moveA = "pb";
-			//totalMoves++;
+			totalMoves++;
 			stackB[lstackB] = stackA[lstackA-1];
 			lstackA--;
 			lstackB++;
-			//topMap++;
 		}
 		else if (topMap < STACK_SIZE-2 && stackA[lstackA-1] == sortedStack[topMap + 2] && stackB[lstackB-1] == sortedStack[topMap + 1])
 		{
 			moveA = "pb";
-			//totalMoves++;
 			stackB[lstackB] = stackA[lstackA-1];
+			totalMoves++;
 			lstackA--;
 			lstackB++;
-			//topMap++;
 		}
-		else if (bottomMap >=0 && stackA[lstackA-1] == sortedStack[bottomMap+1])
+		else if (stackA[lstackA-1] == sortedStack[bottomMap-1])
 		{
 			moveA = "pb";
-			//totalMoves++;
+			totalMoves++;
 			stackB[lstackB] = stackA[lstackA-1];
 			lstackA--;
 			lstackB++;
@@ -384,11 +364,6 @@ int	main(void)
 			moveB = "rb";
 			totalMoves++;
 		}
-		// else if (stackA[lstackA] > stackA[lstackA - 1] && stackA[lstackA]!=sortedStack[topMap])
-		// {
-		// 	swap(&stackA[lstackA], &stackA[lstackA - 1],'a');
-		// 	moveA = "sa";
-		// }
 		else if(lstackA > 0)
 		{
 			//printArrays(sortedStack, stackA, stackB, topMap, lstackA, bottomMap, lstackB, bottomB, STACK_SIZE, lTrapB);
@@ -402,6 +377,7 @@ int	main(void)
 				rotateRight(stackA, lstackA, 0,'a');
 				moveA = "rra";
 			}
+			totalMoves++;
 		}
 
 		// if (stackB[lstackB] == sortedStack[bottomB] && lTrapB[bottomB])
@@ -454,9 +430,9 @@ int	main(void)
 		// }
 		moveA = NULL;
 		moveB=NULL;
-		// printf("total moves: %d\n", totalMoves);
-		// printArrays(sortedStack, stackA, stackB, topMap, lstackA, bottomMap, lstackB, bottomB, STACK_SIZE, lTrapB);
-		// printf("left B trap: %d right B trap: %d\n", lTrapB[bottomB], rTrapB);
+		printf("total moves: %d\n", totalMoves);
+		printArrays(sortedStack, stackA, stackB, topMap, lstackA, bottomMap, lstackB, bottomB, STACK_SIZE, lTrapB);
+		printf("left B trap: %d right B trap: %d\n", lTrapB[bottomB], rTrapB);
 		if (lstackB == STACK_SIZE)
 			break;
 	}

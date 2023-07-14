@@ -1,57 +1,230 @@
 #include <stdio.h>
+#include <unistd.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <time.h>
-void	*ft_memset(void *s, int c, size_t n)
-{
-	unsigned char	*p;
-	size_t			i;
 
-	if (s == NULL)
+void printArray(char *label, int *array, int size) {
+    printf("%s: ",label);
+    for (int i = 0; i < size; i++) {
+        printf("%d ", array[i]);
+    }
+    printf("\n");
+}
+
+
+typedef struct s_array
+{
+	int	*a;
+	int	l;
+}	t_array;
+
+t_array	*ft_arrnew(int max_size)
+{
+	t_array	*array;
+
+	array = (t_array *)malloc(sizeof(t_array));
+	if (array == NULL)
 		return (NULL);
-	p = (unsigned char *)s;
-	i = 0;
-	while (i < n)
+	array->a = (int *)malloc(max_size * sizeof(int));
+	if (array->a == NULL)
 	{
-		p[i] = (unsigned char)c;
+		free(array);
+		return (NULL);
+	}
+	array->l = 0;
+	return (array);
+}
+
+void	ft_arrfree(t_array *array)
+{
+	free(array->a);
+	free(array);
+}
+
+t_array	*ft_arrclone(t_array *arr)
+{
+	t_array	*clone;
+
+	clone = ft_arrnew(arr->l);
+	if (clone == NULL)
+		return (NULL);
+	while (clone->l < arr->l)
+	{
+		clone->a[clone->l] = arr->a[clone->l];
+		clone->l++;
+	}
+	return (clone);
+}
+
+void	ft_arrrev(t_array *array)
+{
+	int	i;
+	int	j;
+	int	temp;
+
+	i = 0;
+	j = array->l - 1;
+	while (i < j)
+	{
+		temp = array->a[i];
+		array->a[i] = array->a[j];
+		array->a[j] = temp;
+		i++;
+		j--;
+	}
+}
+/**
+ * Shifts the elements of the array to the right by one position.
+ *
+ * @param stack A pointer to the array to be shifted.
+ */
+void ft_arrshftl(t_array *stack)
+{
+	int	temp;
+	int i;
+
+	temp = stack->a[0];
+	i = 0;
+	while (i < stack->l - 1)
+	{
+		stack->a[i] = stack->a[i + 1];
 		i++;
 	}
-	return (s);
+	stack->a[stack->l - 1] = temp;
 }
-char	*ft_strnew(size_t size)
+/**
+ * Shifts the elements of the array to the left by one position.
+ *
+ * @param stack A pointer to the array to be shifted.
+ */
+void ft_arrshftr(t_array *stack)
 {
-	char	*str;
+	int	temp;
+	int i;
 
-	if (size == 0)
-		size = 1;
-	str = (char *)malloc((size + 1) * sizeof(char));
-	if (str == NULL)
-		return (NULL);
-	ft_memset(str, '\0', size + 1);
-	return (str);
+	temp = stack->a[stack->l - 1];
+	i = stack->l - 1;
+	while (i > 0)
+	{
+		stack->a[i] = stack->a[i - 1];
+		i--;
+	}
+	stack->a[0] = temp;
 }
 
-void bubble_sort(int *array, int size)
+void	ft_putchar_fd(char c, int fd)
+{
+	write(fd, &c, 1);
+}
+void	ft_putstr_fd(const char *s, int fd)
+{
+	while (*s)
+	{
+		ft_putchar_fd(*s, fd);
+		s++;
+	}
+}
+
+t_array *ft_arrsort(t_array *array)
 {
 	int	temp;
 	int	i;
 	int	h;
 
 	i = 0;
-	while (i < size - 1)
+	while (i < array->l - 1)
 	{
 		h = 0;
-		while (h < size - i - 1)
+		while (h < array->l - i - 1)
 		{
-			if (array[h] > array[h + 1])
+			if (array->a[h] > array->a[h + 1])
 			{
-				temp = array[h];
-				array[h] = array[h + 1];
-				array[h + 1] = temp;
+				temp = array->a[h];
+				array->a[h] = array->a[h + 1];
+				array->a[h + 1] = temp;
 			}
 			h++;
 		}
 		i++;
 	}
+	return (array);
+}
+/**
+ * Checks if an array is sorted in ascending order.
+ *
+ * @param stack The array to be checked for sorting.
+ * @return 1 if the array is sorted in ascending order, 0 otherwise.
+ */
+int	ft_arrissorted(t_array *stack)
+{
+	int	i;
+
+	i = 0;
+	while (i < stack->l - 1)
+	{
+		if (stack->a[i + 1] < stack->a[i])
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+/**
+ * Finds the index of an integer in the given array.
+ *
+ * @param arr The array in which to search for the integer.
+ * @param n The integer to find in the array.
+ * @return The index of the integer in the array, or -1 if not found.
+ */
+int ft_arrindexof(t_array *arr, int n) {
+    int i = 0;
+
+    while (i < arr->l) {
+        if (arr->a[i] == n) {
+            return (i);
+        }
+        i++;
+    }
+    return (-1);
+}
+
+/**
+ * Find the largest integer in the given array.
+ *
+ * @param arr The array from which to find the largest integer.
+ * @param n The largest integer in the array.
+ */
+int ft_arrfindl(t_array *arr) {
+	t_array *clone;
+	int largest;
+
+	if(arr->l == 0)
+		return (-1);
+	clone = ft_arrclone(arr);
+	ft_arrsort(clone);
+	largest = clone->a[clone->l -1];
+	ft_arrfree(clone);
+	return (largest);
+}
+
+/**
+ * Find the smalles integer in the given array.
+ *
+ * @param arr The array from which to find the largest integer.
+ * @param n The largest integer in the array.
+ */
+int ft_arrfinds(t_array *arr) {
+	t_array *clone;
+	int largest;
+
+	if(arr->l == 0)
+		return (-1);
+	clone = ft_arrclone(arr);
+	ft_arrsort(clone);
+	largest = clone->a[0];
+	ft_arrfree(clone);
+	return (largest);
 }
 
 /**
@@ -64,29 +237,30 @@ void bubble_sort(int *array, int size)
  * @return A dynamically allocated array of normalized indexes or NULL if
  * memory allocation fails.
  */
-int *normalize_input(int *array, int size)
+t_array *normalize_input(int *array, int size)
 {
-	int *sorted;
+	t_array *sorted;
     int curr;
     int i;
 
     i = 0;
-	sorted =(int *)malloc(size * sizeof(int));
+	sorted = ft_arrnew(size);
 	if (sorted == NULL)
         return NULL;
     while (i < size)
 	{
-		sorted[i] = array[i];
+		sorted->a[i] = array[i];
+		sorted->l++;
 		i++;
 	}
-	bubble_sort(sorted, size);
+	ft_arrsort(sorted);
     i = 0;
     while (i < size)
     {
         curr = 0;
-        while (array[curr] != sorted[i])
+        while (array[curr] != sorted->a[i])
             curr++;
-        sorted[i] = curr;
+        sorted->a[i] = curr;
 		i++;
     }
     return sorted;
@@ -157,72 +331,6 @@ int	digit_counter(int value, int n_base)
 }
 
 /**
- * Compare two digits of numbers stored in the base rappresented by n_base
- * being 1>base 2, 2>base 4, 3>base 8, 4>base 16, etc.
- *
- * This function compares the specified digit (group of n bits)of two numbers.
- * @param n1 The first number to compare.
- * @param n2 The second number to compare.
- * @param digit The digit position to compare (1-indexed).
- * @param n_base The base used for storing the numbers.
- * @return 1 if n1 > n2, -1 if n2 > n1, 0 if equal.
- * @note The mask variable is a group of n_base 1's used to mask the bits we
- * want to compare. Can be calculated as either 2^n_base - 1 or
- * (1 << n_base) - 1
- * ex:with n_base=3 (1<<n_base) = 1000, (1<<n_base)-1 = 111 = 7 =2^n_base - 1
- * @note (n_base>>digit*n_base) shifts the bits of n_base to the right by
- * bringing the bitscorresponding at the  digit position at the beginning of
- * the number so to mask them with & mask
- * @note the position digit is 0 based
- */
-int	compare_base_digit(int n1, int n2, int digit, int n_base)
-{
-	int	mask;
-	int	digit_n1;
-	int	digit_n2;
-
-	mask = (1 << n_base) - 1;
-	digit_n1 = (n1 >> digit * n_base) & mask;
-	digit_n2 = (n2 >> digit * n_base) & mask;
-	if (digit_n1 > digit_n2)
-		return (1);
-	else if (digit_n2 > digit_n1)
-		return (-1);
-	else
-		return (0);
-}
-/**
- * Find the position for a number in a stack based on a specific digit
- * in base n_base being n_base1>base 2, 2>base 4, 3>base 8, 4>base 16, etc.
- *
- * @param stack The stack array.
- * @param size The size of the stack array.
- * @param number The number to be inserted.
- * @param digit The digit position to compare (1-indexed).
- * @param n_base The base used for storing the numbers.
- * @return The position for inserting the number in the stack.
- */
-int	find_b_stack_pos(int *stack, int size, int number, int digit, int n_base)
-{
-	int	position;
-	int comp;
-	int	i;
-
-	position = 0;
-	i = size - 1;
-	while (i >= 0)
-	{
-		comp = compare_base_digit(stack[i], number, digit, n_base);
-		if (comp<1)
-		{
-			position = i + 1;
-			break ;
-		}
-		i--;
-	}
-	return (position);
-}
-/**
  * Extract a digit from a number in a specified base n_base
  * being n_base1>base 2, 2>base 4, 3>base 8, 4>base 16, etc.
  *
@@ -243,20 +351,20 @@ int	extract_digit(int number, int digit, int n_base)
  * Check if the stack contains numbers belonging to a certain digit group.
  *
  * @param stack The stack array to check.
- * @param size The size of the stack array.
  * @param digit_grp The desired digit group.
  * @param digit The digit position to check (1-indexed).
  * @param n_base The base used for storing the numbers.
- * @return 1 if the stack contains numbers belonging to the specified digit group, 0 otherwise.
+ * @return 1 if the stack contains numbers belonging to the specified digit
+ * group, 0 otherwise.
  */
-int	check_dgt_grp_in_stack(int *stack, int size, int digit_grp, int digit, int n_base)
+int	contains_dgt_grp(t_array *stack, int digit_grp, int digit, int n_base)
 {
 	int	i;
 
 	i = 0;
-	while (i < size)
+	while (i < stack->l)
 	{
-		if (extract_digit(stack[i], digit, n_base) == digit_grp)
+		if (extract_digit(stack->a[i], digit, n_base) == digit_grp)
 			return (1);
 		i++;
 	}
@@ -264,224 +372,250 @@ int	check_dgt_grp_in_stack(int *stack, int size, int digit_grp, int digit, int n
 }
 
 /**
+ * Implements the 's' instruction
+ *
+ * @param a pointer to the first integer (head of the first stack)
+ * @param b pointer to the second integer (head of the second stack)
+ * @param label The label of the stack.
+ */
+int s(t_array *stack, char label)
+{
+	int	temp;
+
+	temp = stack->a[stack->l - 1];
+	stack->a[stack->l - 1] = stack->a[stack->l - 2];
+	stack->a[stack->l - 2] = temp;
+	ft_putchar_fd('s', 1);
+	ft_putchar_fd(label, 1);
+	ft_putchar_fd('\n', 1);
+	return (1);
+}
+/**
  * Implements the 'r' instruction
  *
  * @param stack The stack to be rotated.
- * @param length The length of the stack.
+ * @param label The label of the stack.
  */
-void r(int *stack, int length)
+int r(t_array *stack, char label)
 {
-	int	temp;
-	int i;
-
-	temp = stack[0];
-	i = 0;
-	while (i < length - 1)
-	{
-		stack[i] = stack[i + 1];
-		i++;
-	}
-	stack[length - 1] = temp;
+    ft_arrshftl(stack);
+    ft_putchar_fd('r', 1);
+    ft_putchar_fd(label, 1);
+    ft_putchar_fd('\n', 1);
+    return 1;
 }
 
 /**
  * Implements the 'rr' instruction
  *
  * @param stack The stack to be rotated.
- * @param length The length of the stack.
+ * @param label The label of the stack.
  */
-void rr(int *stack, int length)
+int rr(t_array *stack, char label)
 {
-	int		temp;
-	int		i;
-
-	temp = stack[length - 1];
-	i = length-1;
-	while(i > 0)
-	{
-		stack[i] = stack[i - 1];
-		i--;
-	}
-	stack[0] = temp;
+	ft_arrshftr(stack);
+	ft_putchar_fd('r', 1);
+	ft_putchar_fd('r', 1);
+	ft_putchar_fd(label, 1);
+	ft_putchar_fd('\n', 1);
+	return (1);
+}
+/**
+ * This is a pattern often used: it will take longer to rotate left(r) or
+ * right(rr) to bring an element at index i to head?
+ *
+ * @param stack Array to rotate.
+ * @param i Index to the element that we want to bring to head.
+ * @param src Src.
+ */
+int rotate_which(t_array *stack, int i, char label){
+	i = i + 1 >= stack->l - i;
+	if (i)
+		rr(stack, label);
+	else
+		r(stack, label);
+	return (1);
 }
 
 /**
  * Implements the 'p' instruction
  *
  * @param dest Destination.
- * @param dest_l The length of destination.
  * @param src Src.
- * @param src_l The length of src.
  */
-void	p(int *dest, int *dest_l, int *src, int *src_l)
+int	p(t_array *dest, t_array *src, char label)
 {
-	dest[*dest_l] = src[*src_l-1];
-	(*dest_l)++;
-	(*src_l)--;
-}
-
-/**
- * Checks if an array is sorted in ascending order.
- *
- * @param stack The array to be checked for sorting.
- * @param size The size of the array.
- * @return 1 if the array is sorted in ascending order, 0 otherwise.
- */
-int	is_sorted(int *stack, int size)
-{
-	int	i;
-
-	i = 0;
-	while (i < size - 1)
-	{
-		if (stack[i + 1] < stack[i])
-			return (0);
-		i++;
-	}
+	dest->a[dest->l] = src->a[src->l - 1];
+	dest->l++;
+	src->l--;
+	ft_putchar_fd('p', 1);
+	ft_putchar_fd(label, 1);
+	ft_putchar_fd('\n', 1);
 	return (1);
 }
 
-/**
- * CLones an array.
- */
-int* clone_array(int *arr, int size)
-{
-	int	*clone;
-	int	i;
 
-	clone = (int *)malloc(size * sizeof(int));
-	if (clone == NULL)
-		return (NULL);
-	i = 0;
-	while (i < size)
+/**
+ * Sorts maps with 3 or lesser values.
+ *
+ * @param stack A pointer to the array to be sorted.
+ * @return The total number of moves required to sort the array.
+ */
+int	sort_smallest_map(t_array *stack)
+{
+	int *a;
+	int l;
+	int total_moves;
+
+	a=stack->a;
+	l=stack->l;
+	total_moves = 0;
+	if(stack->l > 3)
+		return (0);
+	while (!ft_arrissorted(stack))
 	{
-		clone[i] = arr[i];
-		i++;
+		if (stack->l == 2 || a[0] == 0)
+			total_moves += s(stack,'a');
+		else if (a[0] == 1 && a[1] == 2)
+			total_moves +=rr(stack, 'a');
+		else if (a[0] == 1 && a[1] == 0)
+			total_moves +=r(stack, 'a') + s(stack,'a');
+		else if (a[0] == 2 && a[1] == 1)
+			total_moves +=rr(stack, 'a') + s(stack,'a');
+		else if (a[0] == 2 && a[1] == 0)
+			total_moves +=r(stack, 'a');
 	}
-	return (clone);
+	return (total_moves);
 }
+
+/**
+ * Uses the same pattern as rotate_which on multiple values >=low, moving
+ * close to the head of the array the first available biggerthan 2
+ * (the biggest value of the 3 map)
+ *
+ * @param a Stack to rotate.
+ * @param low Value of the element from wih on we'll bring the closest to edge.
+ * @param label the label of the stack we are shifting.
+ * @param cls must be initialized as INT_MAX by the caller (NORM)
+ */
+int	move_closest_to_edge(t_array *a, int low, char label, int cls)
+{
+	t_array	*clone;
+	int		i;
+	int		direction;
+
+	clone = ft_arrsort(ft_arrclone(a));
+	while (clone->a[clone->l - 1] >= low)
+	{
+		i = ft_arrindexof(a, clone->a[clone->l - 1]);
+		if (i + 1 >= a->l - i && i + 1 < cls)
+		{
+			cls = i + 1;
+			direction = 1;
+		}
+		if (i + 1 < a->l - i && a->l - i < cls)
+		{
+			cls = a->l - i;
+			direction = 0;
+		}
+		clone->l--;
+	}
+	ft_arrfree(clone);
+	if (direction == 1)
+		return (rr(a, label));
+	return (r(a, label));
+}
+
+int sort_small_map(t_array *stack_a, t_array *stack_b)
+{
+	int total_moves;
+	int i;
+
+	while (stack_a->l > 3 && !ft_arrissorted(stack_a))
+	{
+		if(stack_a->a[stack_a->l - 1] > 2)
+			total_moves+=p(stack_b, stack_a,'b');
+		else
+			total_moves+=move_closest_to_edge(stack_a, ft_arrfindl(stack_a), 'a', INT_MAX);
+	}
+	if(!ft_arrissorted(stack_a) && stack_a->l == 3)
+		total_moves+=sort_smallest_map(stack_a);
+	while (stack_b->l > 0)
+	{
+		i = ft_arrindexof(stack_b, ft_arrfinds(stack_b));
+		if(i == stack_b->l - 1)
+			total_moves+=p(stack_a, stack_b,'a');
+		else if(stack_b->l == 2)
+			total_moves+=s(stack_b,'b');
+		else
+			total_moves+=rotate_which(stack_b, i, 'b');
+	}
+	return (total_moves);
+}
+
 /**
  * To correctly sort the numbers using radix sort, we need to make sure that
  * every time we extract numbers by the nth radix, the remainin numbers are
- * in the same order as in origin.
+ * in the same order as in origin. Sometimes the algorithm produces a
+ * shift more than is supposed to. This helps correct it
  *
  * @param orig The original array of integers.
- * @param l_orig The length of the original array.
  * @param dist The distinct array of integers.
- * @param l_dist The length of the distinct array.
  */
-int check_filtered_order(int *orig, int l_orig, int *dist, int l_dist) {
+int check_filtered_order(t_array *orig, t_array *dist) {
     int i;
 	int h;
 
 	i = 0;
 	h = 0;
-    while (i < l_orig && h < l_dist) {
-        if (orig[i] == dist[h]) {
+    while (i < orig->l && h < dist->l) {
+        if (orig->a[i] == dist->a[h]) {
             h++;
         }
         i++;
     }
-    if (h == l_dist)
+    if (h == dist->l)
         return (1);
     return (0);
 }
-void reverse_array(int* array, int size) {
-    int i = 0;
-    int j = size - 1;
 
-    while (i < j) {
-        int temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-        i++;
-        j--;
-    }
-}
 /**
- * The function takes a normalized version of stack_a, stack_b (empty)
- * and the size of stack_a as input.
- * Calculate the max possible number of bits (in a normalized array the max
- * number is size-1. It performs radix sort on the array by
- * iterating over each bit position from the least significant to the most
- * significant. It uses stack_b as an auxiliary stack for temporary storage
- * during the sorting process.
+ * Sometimes the algorithm produces a shift more than is supposed to.
+ * This finds the best direction to shift the array to fix it
  *
- * @param stack_a The normalized array to be sorted.
- * @param stack_b The empty stack B for temporary storage.
- * @param size The size of the array.
+ * @param original The array that holds the original sorting.
+ * @param stack_a  The array wrongly shifted.
+ * @return         1 if the order fix is by using left shift(r),
+ * 0 for right shift (rr)
  */
-// void	radix_sort(int *stack_a, int *stack_b, int size)
-// {
-// 	int	i;
-// 	int	h;
-// 	int	size_b;
-
-// 	i = 0;
-// 	while (i < digit_counter(size - 1))
-// 	{
-// 		h = size - 1;
-// 		size_b = 0;
-// 		while (h >= 0)
-// 		{
-// 			if (((stack_a[h] >> i) & 1) == 0)
-// 			{
-// 				p(stack_b, size_b, stack_a, h);
-// 				size_b++;
-// 			}
-// 			else
-// 				rr(stack_a, size - size_b);
-// 			h--;
-// 		}
-// 		while (size_b >= 0)
-// 		{
-// 			p(stack_a, bla bla something, 'a');
-// 			size_b--;
-// 		}
-// 		i++;
-// 		if (is_sorted(stack_a, size))
-// 			break ;
-// 	}
-// }
-
-int check_filtered_order_b(int *clone, int size, int *stack_a, int size_a){
+int find_direction_fix(t_array *ordered, t_array *stack){
 	int h=0;
 	int k =0;
-	int *temp = clone_array(stack_a, size_a);
-	while (!check_filtered_order(clone, size, temp, size_a))
+	t_array *temp = ft_arrclone(stack);
+	while (!check_filtered_order(ordered, temp))
 	{
-		r(temp, size_a);
+		ft_arrshftl(temp);
 		h++;
 	}
-	free(temp);
-	temp = clone_array(stack_a, size_a);
-	while (!check_filtered_order(clone, size, temp, size_a))
+	ft_arrfree(temp);
+	temp = ft_arrclone(stack);
+	while (!check_filtered_order(ordered, temp))
 	{
-		rr(temp, size_a);
+		ft_arrshftr(temp);
 		k++;
 	}
-	free(temp);
+	ft_arrfree(temp);
 	return (h<k);
 }
 
+#define STACK_SIZE 500
+/*
 
-void printArray(int *array, int size) {
-    printf("Array: ");
-    for (int i = 0; i < size; i++) {
-        printf("%d ", array[i]);
-    }
-    printf("\n");
-}
-
-#define STACK_SIZE 100
-// typedef struct s_radix_group
-// {
-// 	int	first;
-// 	int	last;
-// 	int	count;
-// 	int digit;
-// }	t_radix_group;
-
+size: size is not only the size of the input, maap and stacks arrays, but also
+size-1 is the maximum number that will appear in the map array.
+n_base_mask: is not only used as a mask to retrieve the value of a n_base digit
+within it's int rappresentation, but also the max value of a n_base digit.
+*/
 int	main(void)
 {
 	int	*input =(int *)malloc(STACK_SIZE * sizeof(int));
@@ -495,86 +629,87 @@ int	main(void)
         input[i] = input[randomIndex];
         input[randomIndex] = temp;
     }
-	int *map = normalize_input(input, STACK_SIZE);
-	int *stack_a = clone_array(map, STACK_SIZE);
-	printf("Input\n ");
-	printArray(input, STACK_SIZE);
-	int	*stack_b =(int *)malloc(STACK_SIZE * sizeof(int));
-	int *clone;
-	int *temp;
+	t_array *map = normalize_input(input, STACK_SIZE);
+	t_array *stack_a = ft_arrclone(map);
+	t_array	*stack_b = ft_arrnew(STACK_SIZE);
+	t_array *clone;
+	t_array *temp;
 	int size = STACK_SIZE;
 	int total_moves = 0;
 	int	i;
 	int	h;
 	int k;
-	int	size_b;
-	int	size_a;
+	int pruning_complete;
 	int n_base = 2;
 	int n_base_mask = ipow(2, n_base) - 1;
 	int bit_count = digit_counter(size - 1, n_base);
-	if(!is_sorted(stack_a, size)){
+	if(size <= 3 && !ft_arrissorted(stack_a))
+		total_moves = sort_smallest_map(stack_a);
+	else if(size <= 37 && !ft_arrissorted(stack_a))
+		total_moves = sort_small_map(stack_a, stack_b);
+	else if(!ft_arrissorted(stack_a)){
 		i = 0;
 		while (i < bit_count)
 		{
 			h = 0;
-			size_b = 0;
-			size_a = size;
-			clone = clone_array(stack_a, size_a);
+			stack_b->l = 0;
+			stack_a->l = size;
+			clone = ft_arrclone(stack_a);
 			while (h < size)
 			{
-				if (((stack_a[size_a - 1] >> i * n_base) & n_base_mask) > 0) // i'll keep largest digits (if any) in stack_a
-				{
-					p(stack_b, &size_b, stack_a, &size_a);
-					printf("pb ");
-					total_moves++;
-				}
+				if (((stack_a->a[stack_a->l - 1] >> i * n_base) & n_base_mask) > 0) // i'll keep largest digits (if any) in stack_a
+					total_moves+=p(stack_b, stack_a,'b');
 				else {
-					rr(stack_a, size_a);
-					printf("rra ");
-					total_moves++;
-					h++;
+					k = 1;
+					pruning_complete =1;
+					while(k <= n_base_mask){
+						if(contains_dgt_grp(stack_a, k, i, n_base)){
+							pruning_complete = 0;
+							break;
+						}
+						k++;
+					}
+					if(pruning_complete)
+						h = size;
+					else
+					{
+						total_moves+=rr(stack_a, 'a');
+						h++;
+					}
 				}
 			}
-			while (!check_filtered_order(clone, size, stack_a, size_a))
-			{
-				if(check_filtered_order_b(clone, size, stack_a, size_a))
-					r(stack_a, size_a);
+			while (!check_filtered_order(clone, stack_a))
+				if(find_direction_fix(clone, stack_a))
+					total_moves+=r(stack_a,'a');
 				else
-					rr(stack_a, size_a);
-				printf("ra ");
-				total_moves++;
-			}
+					total_moves+=rr(stack_a,'a');
 			h = 1;
-			reverse_array(clone, size);
+			ft_arrrev(clone);
 			while(h <= n_base_mask){
-				while(check_dgt_grp_in_stack(stack_b, size_b, h, i, n_base)){
-					if(extract_digit(stack_b[size_b - 1],i,n_base) == h){
-						p(stack_a, &size_a, stack_b, &size_b);
-						printf("pa ");
-					} else {
-						rr(stack_b, size_b);
-						printf("rb ");
-					}
-					total_moves++;
+				while(contains_dgt_grp(stack_b, h, i, n_base)){
+					if(extract_digit(stack_b->a[stack_b->l - 1],i,n_base) == h)
+						total_moves+=p(stack_a, stack_b, 'a');
+					else
+						total_moves+=rr(stack_b, 'b');
 				}
 				h++;
-				while (!check_filtered_order(clone, size, stack_b, size_b))
-				{
-					if(check_filtered_order_b(clone, size, stack_b, size_b))
-						r(stack_b, size_b);
+				while (!check_filtered_order(clone, stack_b))
+					if(find_direction_fix(clone, stack_b))
+						total_moves+=r(stack_b, 'b');
 					else
-						rr(stack_b, size_b);
-					printf("ra ");
-					total_moves++;
-				}
+						total_moves+=rr(stack_b, 'b');
 			}
-			free(clone);
+			ft_arrfree(clone);
 			i++;
-			if (is_sorted(stack_a, size))
+			if (ft_arrissorted(stack_a))
 				break ;
 		}
 	}
 	printf("\ntotal moves: %d\n", total_moves);
-	printArray(denormalize(input, map, stack_a, STACK_SIZE), STACK_SIZE);
+	printArray("result",denormalize(input, map->a, stack_a->a, STACK_SIZE), STACK_SIZE);
+	ft_arrfree(stack_a);
+	ft_arrfree(stack_b);
+	ft_arrfree(map);
+	free(input);
 	return (0);
 }

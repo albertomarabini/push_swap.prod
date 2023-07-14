@@ -84,7 +84,7 @@ char	*ft_strnew(size_t size)
 
 
 
-#define STACK_SIZE 100
+#define STACK_SIZE 15
 
 
 
