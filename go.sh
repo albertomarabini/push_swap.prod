@@ -1,1 +1,1 @@
-gcc push_swap5.c -g -o ../debugger/a.out
+gcc push_swap.c -g -o ../debugger/a.out
