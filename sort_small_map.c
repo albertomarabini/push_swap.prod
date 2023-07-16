@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 13:50:53 by amarabin          #+#    #+#             */
-/*   Updated: 2023/07/15 15:13:39 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/07/15 17:10:00 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,9 @@ static int	rotate_which(t_array *stack, int i, char label)
 int	sort_smallest_map(t_array *stack)
 {
 	int	*a;
-	int	l;
 	int	total_moves;
 
 	a = stack->a;
-	l = stack->l;
 	total_moves = 0;
 	if (stack->l > 3)
 		return (0);

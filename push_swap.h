@@ -6,17 +6,16 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 15:00:56 by amarabin          #+#    #+#             */
-/*   Updated: 2023/07/15 17:03:55 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/07/16 02:16:17 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
-# include <unistd.h>
 # include <limits.h>
 # include <stdlib.h>
+# include <unistd.h>
 
 typedef struct s_array
 {
@@ -57,6 +56,7 @@ int			p(t_array *dest, t_array *src, char label);
 t_array		*normalize_input(int *array, int size);
 int			ipow(int n, int power);
 void		ft_putchar_fd(char c, int fd);
+void		ft_putstr_fd(const char *s, int fd);
 int			ft_arrfinds(t_array *arr);
 void		ft_arrshftr(t_array *stack);
 t_array		*ft_arrsort(t_array *array);
@@ -68,5 +68,6 @@ void		ft_arrrev(t_array *array);
 t_array		*ft_arrclone(t_array *arr);
 void		ft_arrfree(t_array *array);
 t_array		*ft_arrnew(int max_size);
+
 
 #endif

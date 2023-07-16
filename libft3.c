@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:26:34 by amarabin          #+#    #+#             */
-/*   Updated: 2023/07/15 15:16:23 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/07/16 01:46:44 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,15 @@ int	ft_arrfinds(t_array *arr)
 void	ft_putchar_fd(char c, int fd)
 {
 	write(fd, &c, 1);
+}
+
+void	ft_putstr_fd(const char *s, int fd)
+{
+	while (*s)
+	{
+		ft_putchar_fd(*s, fd);
+		s++;
+	}
 }
 
 /**
