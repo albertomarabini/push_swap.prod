@@ -11,10 +11,6 @@ OBJS_TEST = $(SRCS_TEST:.c=.o)
 all: $(NAME)
 	$(MAKE) clean
 
-test: $(OBJS_TEST)
-	$(CC) $(CFLAGS) -o push_swap_test $(OBJS_TEST)
-	$(MAKE) clean
-
 debug:
 	$(CC) $(CFLAGS) $(SRCS) -g -o ../debugger/a.out
 	$(MAKE) clean

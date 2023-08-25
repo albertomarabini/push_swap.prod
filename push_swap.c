@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 01:47:57 by amarabin          #+#    #+#             */
-/*   Updated: 2023/07/16 07:49:13 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/07/24 00:34:01 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,4 +133,5 @@ int	main(int size, char *argv[])
 	ft_arrfree(map);
 	free(input);
 	return (0);
+	//What about trying in base 5 by simply using the % operator?!!
 }
