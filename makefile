@@ -15,6 +15,10 @@ debug:
 	$(CC) $(CFLAGS) $(SRCS) -g -o ../debugger/a.out
 	$(MAKE) clean
 
+test:
+	$(CC) $(CFLAGS) $(SRCS_TEST) -o push_swap_test
+	$(MAKE) clean
+
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 
