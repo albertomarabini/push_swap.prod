@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:26:34 by amarabin          #+#    #+#             */
-/*   Updated: 2023/07/16 01:46:44 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/01 06:46:48 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,21 @@ int	ipow(int n, int power)
 		i++;
 	}
 	return (result);
+}
+void reverse_array(int *arr, int len)
+{
+	int	i;
+	int	j;
+	int	temp;
+
+	i = 0;
+	j = len - 1;
+	while (i < j)
+	{
+		temp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = temp;
+		i++;
+		j--;
+	}
 }

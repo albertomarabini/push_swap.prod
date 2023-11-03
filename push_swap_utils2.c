@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:23:23 by amarabin          #+#    #+#             */
-/*   Updated: 2023/07/16 06:31:09 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/02 01:42:11 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_array	*normalize_input(int *array, int size)
 	sorted = ft_arrclone(&original);
 	if (sorted == NULL)
 		return (NULL);
-	ft_arrsort(sorted);
+	ft_arrisort(sorted);
 	normalized = ft_arrclone(sorted);
 	i = 0;
 	while (i < size)
@@ -74,7 +74,7 @@ int	s(t_array *stack, char label)
  */
 int	r(t_array *stack, char label)
 {
-	ft_arrshftl(stack);
+	ft_arrshftr(stack);
 	ft_putchar_fd('r', 1);
 	ft_putchar_fd(label, 1);
 	ft_putchar_fd('\n', 1);
@@ -89,7 +89,7 @@ int	r(t_array *stack, char label)
  */
 int	rr(t_array *stack, char label)
 {
-	ft_arrshftr(stack);
+	ft_arrshftl(stack);
 	ft_putchar_fd('r', 1);
 	ft_putchar_fd('r', 1);
 	ft_putchar_fd(label, 1);

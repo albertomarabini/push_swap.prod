@@ -6,130 +6,113 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 01:47:57 by amarabin          #+#    #+#             */
-/*   Updated: 2023/07/24 00:34:01 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/03 07:30:10 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
-{
-	if (s1 == NULL)
-	{
-		if (s2 == NULL)
-			return (0);
-		else
-			return (-1);
-	}
-	else if (s2 == NULL)
-		return (1);
-	while (n > 0)
-	{
-		if (*s1 != *s2)
-			return ((unsigned char)*s1 - (unsigned char)*s2);
-		if (*s1 == '\0')
-			return (0);
-		s1++;
-		s2++;
-		n--;
-	}
-	return (0);
-}
-
 /**
- * Converts a string representation of an integer to an integer value.
- *
- * The function parses the input string `nptr` and converts it to an integer.
- * If an error condition occurs, the first character of the input string is
- * modified to 'E' and 0 is returned.
- *
- * @param nptr The string to convert to an integer.
- * @return The converted integer value if successful, 0 if an error occurs.
+ * 
+ * NUMERIC RAPPRESENTATION OF THE STACKS
+ * 
+ * the command ./checker_Mac "1 2 3 4 5" considers 1 to be the head of the
+ * stack.
+ * <-- rra  ra -->
+ *    1 2 3 4 5
+ *    ^ head
+ * but using arrays the head of the stack has to be the last element of
+ * our stack
+ * 
+ * <-- ra  rra -->
+ *    5 4 3 2 1
+ *       head ^
  */
-int	ft_atoi_mod(char *nptr)
-{
-	int			sign;
-	long long	result;
-	int			i;
 
-	sign = 1;
-	result = 0;
+
+/** DELETE!!!! */
+#include <stdio.h>
+int	indexof(int n, int *arr, int size)
+{
+	int	i;
+//Delete this
 	i = 0;
-	if (!nptr)
-		return (0);
-	if (nptr[0] == '-' || nptr[0] == '+')
+	while (i < size)
 	{
-		if (nptr[0] == '-')
-			sign = -1;
+		if (arr[i] == n)
+		{
+			return (i);
+		}
 		i++;
 	}
-	while (nptr[i] >= '0' && nptr[i] <= '9')
-		result = (result * 10) + (nptr[i++] - '0');
-	result *= sign;
-	if (nptr[i] != '\0' || result > INT_MAX || result < INT_MIN)
+	return (-1);
+}
+void	printArray(char *label, int *array, int size)
+{
+	printf("%s: ", label);
+	for (int i = 0; i < size; i++)
 	{
-		nptr[0] = 'E';
-		return (0);
+		printf("%d ", array[i]);
 	}
-	return ((int)result);
+	printf("\n");
+	//also delete this
 }
 
-int	*print_error(int *result)
+int	*dnrmlize(int *original, int *map, int *normalized, int size)
 {
-	ft_putstr_fd("Error\n", 2);
-	if (result)
-		free(result);
-	return (NULL);
-}
-
-int	*parse_input(int size, char *argv[])
-{
-	int	*result;
-	int	result_size;
+	int	*ret;
 	int	i;
-	int	num;
 
-	result_size = 0;
-	result = (int *)malloc((size - 1) * sizeof(int));
-	if (!result || size <= 1)
-		return (print_error(result));
-	while (result_size < size - 1)
+	ret = malloc(sizeof(int) * size);
+	if (!ret)
+		return (NULL);
+	i = 0;
+	while (i < size)
 	{
-		num = ft_atoi_mod(argv[result_size + 1]);
-		if (num == 0 && argv[result_size + 1][0] == 'E')
-			return (print_error(result));
-		i = 0;
-		while (i < result_size)
-			if (result[i++] == num)
-				return (print_error(result));
-		result[result_size] = num;
-		result_size++;
+		ret[i] = original[indexof( normalized[i], map, size)];
+		i++;
 	}
-	return (result);
+	return (ret);
+	//delete this
 }
 
 int	main(int size, char *argv[])
 {
 	int			*input;
+	int			tm;
 	t_array		*map;
 	t_stacks	*stks;
 	t_n_base	*n_base;
 
-	input = parse_input(size, argv);
+	tm = 0;
+	input = parse_input(&size, argv);
 	if (!input)
 		return (0);
-	size -= 1;
+	reverse_array(input, size);
 	map = normalize_input(input, size);
 	stks = init_stacks(map, size);
-	n_base = init_n_base_data(2, size - 1);
+	n_base = init_n_base_data(4, size - 1);
 	if (size <= 3 && !ft_arrissorted(stks->a))
-		sort_smallest_map(stks->a);
-	else if (size <= 37 && !ft_arrissorted(stks->a))
-		sort_small_map(stks->a, stks->b);
+		tm = sort_smallest_map(stks->a);
+	else if (size <= 200 && !ft_arrissorted(stks->a))
+		tm = sort_small_map(stks->a, stks->b);
 	else if (!ft_arrissorted(stks->a))
-		n_binary_radix_sort(stks, n_base, size);
+		tm = n_binary_radix_sort(stks, n_base, size);
+
+
+	/** DEBUG */
+
+	// printf("\ntotal moves: %d\n", tm);
+	// printArray("\nmap\n", map->a, size);
+	// printArray("\nnorm\n", stks->a->a, size);
+	// printArray("result", dnrmlize(input, map->a, stks->a->a, size), size);
+
+	
+	/** DEBUG */
+
+		
 	free_stacks(stks);
-	free_n_base_data(n_base);
+	free(n_base);
 	ft_arrfree(map);
 	free(input);
 	return (0);

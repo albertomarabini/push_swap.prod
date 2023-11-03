@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 01:40:27 by amarabin          #+#    #+#             */
-/*   Updated: 2023/09/25 01:23:11 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/03 11:20:29 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	*generate_test(int size)
 
 	test = (int *)malloc(size * sizeof(int));
 	for (int i = 0; i < size; i++)
-		test[i] = i - 50;
+		test[i] = i;
 	srand(time(NULL));
 	for (int i = 0; i < size; i++)
 	{
@@ -82,24 +82,26 @@ int	*generate_test(int size)
 int	main(void)
 {
 	int			*input;
+
 	t_array		*map;
 	t_stacks	*stks;
 	int			total_moves;
 	t_n_base	*n_base;
 	int			size;
 
-	size = 50;
+	size = 500;
 	input = generate_test(size);
+	reverse_array(input, size);
 	printArray("test", input, size);
 	map = normalize_input(input, size);
 	stks = init_stacks(map, size);
 	printArray("\nmap\n", map->a, size);
 	printArray("\nnorm\n", stks->a->a, size);
 	total_moves = 0;
-	n_base = init_n_base_data(2, size - 1);
-	if (size <= 3 && !ft_arrissorted(stks->a))
+	n_base = init_n_base_data(4, size - 1);
+	if (size <= 2 && !ft_arrissorted(stks->a))
 		total_moves = sort_smallest_map(stks->a);
-	else if (size <= 37 && !ft_arrissorted(stks->a))
+	else if (size <= 10 && !ft_arrissorted(stks->a))
 		total_moves = sort_small_map(stks->a, stks->b);
 	else if (!ft_arrissorted(stks->a))
 		total_moves = n_binary_radix_sort(stks, n_base, size);
@@ -108,7 +110,7 @@ int	main(void)
 	printArray("\nnorm\n", stks->a->a, size);
 	printArray("result", dnrmlize(input, map->a, stks->a->a, size), size);
 	free_stacks(stks);
-	free_n_base_data(n_base);
+	free(n_base);
 	ft_arrfree(map);
 	free(input);
 	return (0);

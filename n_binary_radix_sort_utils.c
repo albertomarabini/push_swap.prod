@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:05:55 by amarabin          #+#    #+#             */
-/*   Updated: 2023/07/15 15:06:25 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/03 11:18:42 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,17 @@
  * @param n_base The base used for storing the numbers.
  * @return The extracted digit.
  */
+// int	extract_digit(int number, int digit, int n_base)
+// {
+// 	int	mask;
+
+// 	mask = (1 << n_base) - 1;
+// 	return ((number >> (digit * n_base)) & mask);
+// }
+
 int	extract_digit(int number, int digit, int n_base)
 {
-	int	mask;
-
-	mask = (1 << n_base) - 1;
-	return ((number >> (digit * n_base)) & mask);
+	return ((number / (int)ipow(n_base, digit)) % n_base);
 }
 
 /**
@@ -73,9 +78,7 @@ static int	check_filtered_order(t_array *map, t_array *dist)
 	while (i < map->l && h < dist->l)
 	{
 		if (map->a[i] == dist->a[h])
-		{
 			h++;
-		}
 		i++;
 	}
 	if (h == dist->l)
@@ -91,8 +94,8 @@ static int	check_filtered_order(t_array *map, t_array *dist)
  *
  * @param map      The array that holds the original sorting map.
  * @param stack_a  The array wrongly shifted.
- * @return         1 if the order fix is by using left shift(r),
- * 0 for right shift (rr)
+ * @return         0 if the order fix is by using right shift(r),
+ * 1 for left shift (rr)
  */
 static int	find_direction_fix(t_array *map, t_array *stack)
 {
@@ -140,9 +143,11 @@ int	fix_stack_shift(t_array *stack, t_array *map, char label)
 	while (!check_filtered_order(map, stack))
 	{
 		if (find_direction_fix(map, stack))
-			total_moves += r(stack, label);
-		else
 			total_moves += rr(stack, label);
+		else
+			total_moves += r(stack, label);
+			// printArray("  b aft shift", stack->a, stack->l);
+			// printArray("map    status", map->a, map->l);
 	}
 	return (total_moves);
 }

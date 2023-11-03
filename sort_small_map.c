@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 13:50:53 by amarabin          #+#    #+#             */
-/*   Updated: 2023/07/15 17:10:00 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/02 14:54:26 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,23 @@ static int	rotate_which(t_array *stack, int i, char label)
 {
 	i = i + 1 >= stack->l - i;
 	if (i)
-		rr(stack, label);
-	else
 		r(stack, label);
+	else
+		rr(stack, label);
 	return (1);
 }
 
 /**
  * Sorts maps with 3 or lesser values.
- *
+ *                                                 <-rr  r->
+ *                                       Input       Rappr.
+ *                              Target->[0, 1, 2]-->[0, 1, 2]*
+ * (stack->l == 2)           // Handles [0, 1]
+ * (a[0] == 1 && a[1] == 0)  // Handles [0, 2, 1]-->[1, 0, 2]*
+ * (a[0] == 2 && a[1] == 0)  // Handles [1, 2, 0]-->[2, 0, 1]*
+ * (a[0] == 0 && a[1] == 2)  // Handles [1, 0, 2]-->[0, 2, 1]*
+ * (a[0] == 1 && a[1] == 2)  // Handles [2, 0, 1]-->[1, 2, 0]*
+ * (a[0] == 2 && a[1] == 1)  // Handles [2, 1, 0]-->[2, 1, 0]*
  * @param stack A pointer to the array to be sorted.
  * @return The total number of moves required to sort the array.
  */
@@ -43,20 +51,20 @@ int	sort_smallest_map(t_array *stack)
 
 	a = stack->a;
 	total_moves = 0;
-	if (stack->l > 3)
-		return (0);
-	while (!ft_arrissorted(stack))
+	if (!ft_arrissorted(stack))
 	{
-		if (stack->l == 2 || a[0] == 0)
+		if (stack->l == 2)
+			total_moves += s(stack, 'a');
+		else if (a[0] == 1 && a[1] == 0)
+			total_moves += r(stack, 'a') + s(stack, 'a') + rr(stack, 'a');
+		else if (a[0] == 2 && a[1] == 0)
+			total_moves += rr(stack, 'a');
+		else if (a[0] == 0 && a[1] == 2)
 			total_moves += s(stack, 'a');
 		else if (a[0] == 1 && a[1] == 2)
-			total_moves += rr(stack, 'a');
-		else if (a[0] == 1 && a[1] == 0)
-			total_moves += r(stack, 'a') + s(stack, 'a');
-		else if (a[0] == 2 && a[1] == 1)
-			total_moves += rr(stack, 'a') + s(stack, 'a');
-		else if (a[0] == 2 && a[1] == 0)
 			total_moves += r(stack, 'a');
+		else if (a[0] == 2 && a[1] == 1)
+			total_moves += s(stack, 'a') + rr(stack, 'a');
 	}
 	return (total_moves);
 }
@@ -95,8 +103,64 @@ static int	push_to_head(t_array *a, int low, char label, int cls)
 	}
 	ft_arrfree(clone);
 	if (direction == 1)
-		return (rr(a, label));
-	return (r(a, label));
+		return (r(a, label));
+	return (rr(a, label));
+}
+
+// int	sort_small_map(t_array *stack_a, t_array *stack_b)
+// {
+// 	int	tm;
+// 	int	i;
+
+// 	tm = 0;
+// 	while (stack_a->l > 3 && !ft_arriscsorted(stack_a))
+// 	{
+// 		if (head(stack_a,0) >2)
+// 			tm += p(stack_b, stack_a, 'b');
+// 		if(stack_b->l - 1 >= 2 && head(stack_b,0) > stack_b->a[0])
+// 			tm += rr(stack_b, 'b');
+// 		if(stack_b->l - 1 >= 2 && head(stack_b,0) > head(stack_b,1))
+// 			tm += s(stack_b, 'b');
+// 		if (head(stack_a,0) < head(stack_a,1) && head(stack_a,1) > 2)
+// 			tm += s(stack_a, 'a');
+// 		else if(head(stack_a,0) < stack_a->a[0] && stack_a->a[0] > 2)
+// 			tm += rr(stack_a, 'a');
+// 		else if(stack_a->l > 3)
+// 			tm += push_to_head(stack_a, ft_arrfindl(stack_a), 'a', INT_MAX);
+// 	}
+// 	if (!ft_arriscsorted(stack_a) && stack_a->l == 3)
+// 		tm += sort_smallest_map(stack_a);
+// 	while (stack_b->l > 0 || !ft_arriscsorted(stack_a))
+// 	{
+// 		i = ft_arrindexof(stack_b, ft_arrfinds(stack_b));
+// 		if (i == stack_b->l - 1)
+// 			tm += p(stack_a, stack_b, 'a');
+// 		else
+// 			tm += rotate_which(stack_b, i, 'b');
+// 		if (stack_b->l - 1 >= 2 && head(stack_b,0) > head(stack_b,1))
+// 			tm += s(stack_b, 'b');
+// 		if (head(stack_a,0) < head(stack_a,1))
+// 			tm += s(stack_a, 'a');
+
+int	push_back_b_elements(t_array *stack_a, t_array *stack_b)
+{
+	int	tm;
+	int	i;
+
+	tm = 0;
+	while (stack_b->l > 0 || !ft_arriscsorted(stack_a))
+	{
+		i = ft_arrindexof(stack_b, ft_arrfinds(stack_b));
+		if (i == stack_b->l - 1)
+			tm += p(stack_a, stack_b, 'a');
+		else
+			tm += rotate_which(stack_b, i, 'b');
+		if (stack_b->l - 1 >= 2 && head(stack_b,0) > head(stack_b,1))
+			tm += s(stack_b, 'b');
+		if (head(stack_a,0) < head(stack_a,1))
+			tm += s(stack_a, 'a');
+	}
+	return (tm);
 }
 
 /**
@@ -113,27 +177,24 @@ static int	push_to_head(t_array *a, int low, char label, int cls)
 int	sort_small_map(t_array *stack_a, t_array *stack_b)
 {
 	int	tm;
-	int	i;
 
 	tm = 0;
-	while (stack_a->l > 3 && !ft_arrissorted(stack_a))
+	while (stack_a->l > 3 && !ft_arriscsorted(stack_a))
 	{
-		if (stack_a->a[stack_a->l - 1] > 2)
+		if (head(stack_a, 0) > 2)
 			tm += p(stack_b, stack_a, 'b');
-		else
+		if (stack_b->l - 1 >= 2 && head(stack_b, 0) > stack_b->a[0])
+			tm += rr(stack_b, 'b');
+		if (stack_b->l - 1 >= 2 && head(stack_b, 0) > head(stack_b, 1))
+			tm += s(stack_b, 'b');
+		if (head(stack_a, 0) < head(stack_a, 1) && head(stack_a, 1) > 2)
+			tm += s(stack_a, 'a');
+		else if (head(stack_a, 0) < stack_a->a[0] && stack_a->a[0] > 2)
+			tm += rr(stack_a, 'a');
+		else if (stack_a->l > 3)
 			tm += push_to_head(stack_a, ft_arrfindl(stack_a), 'a', INT_MAX);
 	}
-	if (!ft_arrissorted(stack_a) && stack_a->l == 3)
+	if (!ft_arriscsorted(stack_a) && stack_a->l == 3)
 		tm += sort_smallest_map(stack_a);
-	while (stack_b->l > 0)
-	{
-		i = ft_arrindexof(stack_b, ft_arrfinds(stack_b));
-		if (i == stack_b->l - 1)
-			tm += p(stack_a, stack_b, 'a');
-		else if (stack_b->l == 2)
-			tm += s(stack_b, 'b');
-		else
-			tm += rotate_which(stack_b, i, 'b');
-	}
-	return (tm);
+	return (tm + push_back_b_elements(stack_a, stack_b));
 }

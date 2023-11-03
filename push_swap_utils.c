@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:23:23 by amarabin          #+#    #+#             */
-/*   Updated: 2023/07/15 15:10:12 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/03 02:51:23 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,30 @@
  * @param n_base The base used for storing the number.
  * @return The number of bits in the given integer.
  */
-static int	digit_counter(int value, int n_base)
-{
-	int	bit_count;
+// static int	digit_counter(int value, int n_base)
+// {
+// 	int	bit_count;
 
-	bit_count = 0;
-	while (value != 0)
-	{
-		value = value >> n_base;
-		bit_count++;
-	}
-	return (bit_count);
+// 	bit_count = 0;
+// 	while (value != 0)
+// 	{
+// 		value = value >> n_base;
+// 		bit_count++;
+// 	}
+// 	return (bit_count);
+// }
+
+static int digit_counter(int value, int n_base)
+{
+    int digit_count;
+
+    digit_count = 0;
+    while (value != 0)
+    {
+        value = value / n_base;
+        digit_count++;
+    }
+    return digit_count;
 }
 
 t_n_base	*init_n_base_data(int n_base, int maxsize)
@@ -42,15 +55,22 @@ t_n_base	*init_n_base_data(int n_base, int maxsize)
 
 	data = (t_n_base *)malloc(sizeof(t_n_base));
 	data->base = n_base;
-	data->mask = ipow(2, n_base) - 1;
-	data->largest_digit = ipow(2, n_base) - 1;
+	//data->mask = ipow(2, n_base) - 1;
+	data->mask = n_base - 1;
+	//data->largest_digit = ipow(2, n_base) - 1;
+	data->largest_digit = n_base - 1;
 	data->dgt_count = digit_counter(maxsize, n_base);
 	return (data);
 }
 
-void	free_n_base_data(t_n_base *data)
+/**
+ * Fetch the element from the head of the array - d(elta) positions.
+ */
+int	head(t_array *stack, int d)
 {
-	free(data);
+	if (d >= stack->l || d < 0)
+		return (-1);
+	return (stack->a[stack->l - 1 - d]);
 }
 
 t_stacks	*init_stacks(t_array *a_map, int size)

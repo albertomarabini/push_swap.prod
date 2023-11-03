@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:26:34 by amarabin          #+#    #+#             */
-/*   Updated: 2023/07/15 15:15:08 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/02 00:55:16 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,38 +52,6 @@ t_array	*ft_arrclone(t_array *arr)
 
 void	ft_arrrev(t_array *array)
 {
-	int	i;
-	int	j;
-	int	temp;
-
-	i = 0;
-	j = array->l - 1;
-	while (i < j)
-	{
-		temp = array->a[i];
-		array->a[i] = array->a[j];
-		array->a[j] = temp;
-		i++;
-		j--;
-	}
+	reverse_array(array->a, array->l);
 }
 
-/**
- * Shifts the elements of the array to the right by one position.
- *
- * @param stack A pointer to the array to be shifted.
- */
-void	ft_arrshftl(t_array *stack)
-{
-	int	temp;
-	int	i;
-
-	temp = stack->a[0];
-	i = 0;
-	while (i < stack->l - 1)
-	{
-		stack->a[i] = stack->a[i + 1];
-		i++;
-	}
-	stack->a[stack->l - 1] = temp;
-}
