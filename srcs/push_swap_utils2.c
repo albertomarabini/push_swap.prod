@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:23:23 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/02 01:42:11 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/03 20:23:32 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ t_array	*normalize_input(int *array, int size)
 		return (NULL);
 	ft_arrisort(sorted);
 	normalized = ft_arrclone(sorted);
+	if (normalized == NULL)
+		return (free(sorted->a), free (sorted), NULL);
 	i = 0;
 	while (i < size)
 	{

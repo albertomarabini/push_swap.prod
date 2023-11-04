@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:26:34 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/02 01:40:15 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/04 07:10:47 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,31 +51,6 @@ void	ft_arrshftr(t_array *stack)
 	}
 	stack->a[0] = temp;
 }
-
-// t_array	*ft_arrsort(t_array *array)
-// {
-// 	int	temp;
-// 	int	i;
-// 	int	h;
-
-// 	i = 0;
-// 	while (i < array->l - 1)
-// 	{
-// 		h = 0;
-// 		while (h < array->l - i - 1)
-// 		{
-// 			if (array->a[h] > array->a[h + 1])
-// 			{
-// 				temp = array->a[h];
-// 				array->a[h] = array->a[h + 1];
-// 				array->a[h + 1] = temp;
-// 			}
-// 			h++;
-// 		}
-// 		i++;
-// 	}
-// 	return (array);
-// }
 
 /**
  * Checks if an array is sorted in ascending order.
@@ -134,6 +109,8 @@ int	ft_arrfindl(t_array *arr)
 	if (arr->l == 0)
 		return (-1);
 	clone = ft_arrclone(arr);
+	if (!clone)
+		return (-1);
 	ft_arrsort(clone);
 	largest = clone->a[clone->l - 1];
 	ft_arrfree(clone);

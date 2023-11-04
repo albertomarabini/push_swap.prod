@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:26:34 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/02 00:55:16 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/04 01:51:51 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,3 @@ void	ft_arrrev(t_array *array)
 {
 	reverse_array(array->a, array->l);
 }
-

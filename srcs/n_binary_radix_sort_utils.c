@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:05:55 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/03 11:18:42 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/04 01:54:51 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,6 @@
  * @param n_base The base used for storing the numbers.
  * @return The extracted digit.
  */
-// int	extract_digit(int number, int digit, int n_base)
-// {
-// 	int	mask;
-
-// 	mask = (1 << n_base) - 1;
-// 	return ((number >> (digit * n_base)) & mask);
-// }
-
 int	extract_digit(int number, int digit, int n_base)
 {
 	return ((number / (int)ipow(n_base, digit)) % n_base);
@@ -106,6 +98,8 @@ static int	find_direction_fix(t_array *map, t_array *stack)
 	h = 0;
 	k = 0;
 	temp = ft_arrclone(stack);
+	if (!temp)
+		return (-1);
 	while (!check_filtered_order(map, temp))
 	{
 		ft_arrshftl(temp);
@@ -113,6 +107,8 @@ static int	find_direction_fix(t_array *map, t_array *stack)
 	}
 	ft_arrfree(temp);
 	temp = ft_arrclone(stack);
+	if (!temp)
+		return (-1);
 	while (!check_filtered_order(map, temp))
 	{
 		ft_arrshftr(temp);
@@ -146,8 +142,6 @@ int	fix_stack_shift(t_array *stack, t_array *map, char label)
 			total_moves += rr(stack, label);
 		else
 			total_moves += r(stack, label);
-			// printArray("  b aft shift", stack->a, stack->l);
-			// printArray("map    status", map->a, map->l);
 	}
 	return (total_moves);
 }

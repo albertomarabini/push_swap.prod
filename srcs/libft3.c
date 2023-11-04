@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:26:34 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/01 06:46:48 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/04 01:52:53 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	ft_arrfinds(t_array *arr)
 	if (arr->l == 0)
 		return (-1);
 	clone = ft_arrclone(arr);
+	if (!clone)
+		return (-1);
 	ft_arrsort(clone);
 	largest = clone->a[0];
 	ft_arrfree(clone);
@@ -67,7 +69,8 @@ int	ipow(int n, int power)
 	}
 	return (result);
 }
-void reverse_array(int *arr, int len)
+
+void	reverse_array(int *arr, int len)
 {
 	int	i;
 	int	j;

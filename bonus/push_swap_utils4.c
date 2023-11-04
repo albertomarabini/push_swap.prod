@@ -6,11 +6,11 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 09:41:02 by amarabin          #+#    #+#             */
-/*   Updated: 2023/10/30 10:39:06 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/04 07:20:37 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "checker_bonus.h"
 
 void	free_matrix(char **res)
 {
@@ -121,29 +121,3 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	return (fill_matrix(s, res, c));
 }
-// #include <stdio.h>
-// void print_split(char **res ){
-// 	int i=0;
-// 	while(res[i] != NULL)
-// 	{
-// 		printf("%s$\n", res[i]);
-// 		i++;
-// 	}
-// 	printf("-\n");
-// 	free_matrix(res);
-// }
-// int main(){
-// 	print_split(ft_split("\0aa\0bbb", '\0'));
-// 	print_split(ft_split("la vispa teresa avea tra l'erbetta birimbo 
-//  borambo gentil farfalletta",' '));
-// 	print_split(ft_split("   la vispa   teresa avea   tra l'erbetta 
-//  birimbo   borambo gentil farfalletta   ",' '));
-// 	print_split(ft_split("hello!", ' '));
-// 	print_split(ft_split("xxxxxxxxhello!", 'x'));
-// 	print_split(ft_split("hello!zzzzzzzz", 'z'));
-// 	print_split(ft_split("\11\11\11\11hello!\11\11\11\11", '\11'));
-// 	print_split(ft_split("", 'a'));
-// 	print_split(ft_split("ggggggggggg", 'g'));
-// 	print_split(ft_split("^^^1^^2a,^^^^3^^^^--h^^^^", '^'));
-// 	print_split(ft_split("nonempty", '\0'));
-// }

@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 13:50:53 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/02 14:54:26 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/04 03:06:04 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,16 @@ static int	push_to_head(t_array *a, int low, char label, int cls)
 	int		i;
 	int		direction;
 
-	clone = ft_arrsort(ft_arrclone(a));
+	clone = ft_arrclone(a);
+	if (!clone)
+		return (-1);
+	ft_arrsort(clone);
 	while (clone->a[clone->l - 1] >= low)
 	{
-		i = ft_arrindexof(a, clone->a[clone->l - 1]);
+		i = ft_arrindexof(a, head(clone, 0));
 		if (i + 1 >= a->l - i && i + 1 < cls)
-		{
 			cls = i + 1;
-			direction = 1;
-		}
+		direction = 1;
 		if (i + 1 < a->l - i && a->l - i < cls)
 		{
 			cls = a->l - i;
@@ -101,46 +102,10 @@ static int	push_to_head(t_array *a, int low, char label, int cls)
 		}
 		clone->l--;
 	}
-	ft_arrfree(clone);
 	if (direction == 1)
-		return (r(a, label));
-	return (rr(a, label));
+		return (ft_arrfree(clone), r(a, label));
+	return (ft_arrfree(clone), rr(a, label));
 }
-
-// int	sort_small_map(t_array *stack_a, t_array *stack_b)
-// {
-// 	int	tm;
-// 	int	i;
-
-// 	tm = 0;
-// 	while (stack_a->l > 3 && !ft_arriscsorted(stack_a))
-// 	{
-// 		if (head(stack_a,0) >2)
-// 			tm += p(stack_b, stack_a, 'b');
-// 		if(stack_b->l - 1 >= 2 && head(stack_b,0) > stack_b->a[0])
-// 			tm += rr(stack_b, 'b');
-// 		if(stack_b->l - 1 >= 2 && head(stack_b,0) > head(stack_b,1))
-// 			tm += s(stack_b, 'b');
-// 		if (head(stack_a,0) < head(stack_a,1) && head(stack_a,1) > 2)
-// 			tm += s(stack_a, 'a');
-// 		else if(head(stack_a,0) < stack_a->a[0] && stack_a->a[0] > 2)
-// 			tm += rr(stack_a, 'a');
-// 		else if(stack_a->l > 3)
-// 			tm += push_to_head(stack_a, ft_arrfindl(stack_a), 'a', INT_MAX);
-// 	}
-// 	if (!ft_arriscsorted(stack_a) && stack_a->l == 3)
-// 		tm += sort_smallest_map(stack_a);
-// 	while (stack_b->l > 0 || !ft_arriscsorted(stack_a))
-// 	{
-// 		i = ft_arrindexof(stack_b, ft_arrfinds(stack_b));
-// 		if (i == stack_b->l - 1)
-// 			tm += p(stack_a, stack_b, 'a');
-// 		else
-// 			tm += rotate_which(stack_b, i, 'b');
-// 		if (stack_b->l - 1 >= 2 && head(stack_b,0) > head(stack_b,1))
-// 			tm += s(stack_b, 'b');
-// 		if (head(stack_a,0) < head(stack_a,1))
-// 			tm += s(stack_a, 'a');
 
 int	push_back_b_elements(t_array *stack_a, t_array *stack_b)
 {
@@ -155,9 +120,9 @@ int	push_back_b_elements(t_array *stack_a, t_array *stack_b)
 			tm += p(stack_a, stack_b, 'a');
 		else
 			tm += rotate_which(stack_b, i, 'b');
-		if (stack_b->l - 1 >= 2 && head(stack_b,0) > head(stack_b,1))
+		if (stack_b->l - 1 >= 2 && head(stack_b, 0) > head(stack_b, 1))
 			tm += s(stack_b, 'b');
-		if (head(stack_a,0) < head(stack_a,1))
+		if (head(stack_a, 0) < head(stack_a, 1))
 			tm += s(stack_a, 'a');
 	}
 	return (tm);

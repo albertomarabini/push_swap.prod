@@ -6,11 +6,11 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:16:53 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/01 11:55:41 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/04 07:20:54 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "checker_bonus.h"
 
 /**
  * concat_argc takes a 2D char array (argv) and returns a 
@@ -18,7 +18,7 @@
  * separated by spaces. The function specifically skips the first element 
  * of the array and starts concatenating from the second element (index 1). 
  */
-static int calculate_total_length(char **arr, int size)
+static int	calculate_total_length(char **arr, int size)
 {
 	int	i;
 	int	j;

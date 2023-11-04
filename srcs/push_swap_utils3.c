@@ -1,24 +1,16 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   push_swap_utils3.c								 :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: amarabin <amarabin@student.42.fr>		  +#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2023/10/30 10:14:54 by amarabin		  #+#	#+#			 */
-/*   Updated: 2023/10/30 10:18:11 by amarabin		 ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap_utils3.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/04 01:58:41 by amarabin          #+#    #+#             */
+/*   Updated: 2023/11/04 07:08:52 by amarabin         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-int	*print_error(int *result)
-{
-	ft_putstr_fd("Error\n", 2);
-	if (result)
-		free(result);
-	return (NULL);
-}
 
 /**
  * Converts a string representation of an integer to an integer value.
@@ -74,19 +66,17 @@ static int	*populate_input_array(char **vals, int size)
 
 	result = (int *)malloc(size * sizeof(int));
 	if (!result)
-		return (ft_free_split(vals, size), print_error(result));
+		return (NULL);
 	result_size = 0;
 	while (result_size < size)
 	{
 		num = ft_atoi_mod(vals[result_size]);
 		if (num == 0 && vals[result_size][0] == 'E')
-			return (ft_free_split(vals, size),
-				print_error(result));
+			return (free(result), NULL);
 		i = 0;
 		while (i < result_size)
 			if (result[i++] == num)
-				return (ft_free_split(vals, size),
-					print_error(result));
+				return (free(result), NULL);
 		result[result_size++] = num;
 	}
 	return (result);
@@ -96,21 +86,17 @@ int	*parse_input(int *argc, char *argv[])
 {
 	int		*result;
 	char	**vals;
-	char 	*str_argc;
 
-	if (*argc != 2)
-		return (print_error(NULL));
-	str_argc = concat_argc(argv, *argc);
-	if (!str_argc)
-		return (print_error(NULL));
-	vals = ft_split(str_argc, ' ');
+	if (*argc < 2)
+		return (NULL);
+	vals = ft_split(concat_argc(argv, *argc), ' ');
 	if (!vals)
-		return (print_error(NULL));
+		return (NULL);
 	*argc = 0;
 	while (vals[*argc])
 		(*argc)++;
 	result = populate_input_array(vals, *argc);
-	// if (!result)
-	// 	ft_free_split(vals, *argc);
+	if (!result)
+		return (ft_free_split(vals, *argc), NULL);
 	return (result);
 }

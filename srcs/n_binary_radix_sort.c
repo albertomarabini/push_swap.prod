@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:03:14 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/03 11:26:15 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/04 01:53:43 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,9 @@ static int	transpose_back_dgt_grps(int i, t_stacks *stks, t_n_base *nb)
 				total_moves += p(stks->a, stks->b, 'a');
 			else
 				total_moves += r(stks->b, 'b');
-			// printArray("  a status", stks->a->a, stks->a->l);
-			// printArray("  b status", stks->b->a, stks->b->l);
-			// printArray("map status", stks->map->a, stks->map->l);
 		}
 		h++;
 		total_moves += fix_stack_shift(stks->b, stks->map, 'b');
-			// printArray("  b aft shift", stks->b->a, stks->b->l);
-			// printArray("map    status", stks->map->a, stks->map->l);
 	}
 	return (total_moves);
 }
@@ -117,7 +112,6 @@ static int	prune_dgt_bkts_at(int pos, t_stacks *stks, t_n_base *nb, int size)
 	total_moves = 0;
 	while (h < size)
 	{
-		//if (((stks->a->a[stks->a->l - 1] >> pos * nb->base) & nb->mask) > 0)
 		if (extract_digit(stks->a->a[stks->a->l - 1], pos, nb->base) > 0)
 			total_moves += p(stks->b, stks->a, 'b');
 		else
@@ -165,23 +159,14 @@ int	n_binary_radix_sort(t_stacks *stks, t_n_base *n_base, int size)
 	while (i < n_base->dgt_count)
 	{
 		stks->map = ft_arrclone(stks->a);
-		// printArray("a bef prun", stks->a->a, stks->a->l);
-		// printArray("map", stks->map->a, stks->map->l);
+		if (!stks->map)
+			return (-1);
 		total_moves += prune_dgt_bkts_at(i, stks, n_base, size);
-		// printArray("a aft prun", stks->a->a, stks->a->l);
-		// printArray("b aft prun", stks->b->a, stks->b->l);
-		// printArray("map", stks->map->a, stks->map->l);
 		total_moves += fix_stack_shift(stks->a, stks->map, 'a');
-		// printArray("a aft fix", stks->a->a, stks->a->l);
 		ft_arrrev(stks->map);
 		total_moves += transpose_back_dgt_grps(i, stks, n_base);
-		// printArray("a aft tran", stks->a->a, stks->a->l);
-		// printArray("b aft tran", stks->b->a, stks->b->l);
-		// printArray("map", stks->map->a, stks->map->l);
 		ft_arrfree(stks->map);
 		i++;
-		// if (ft_arrissorted(stks->a))
-		// 	break ;
 	}
 	return (total_moves);
 }

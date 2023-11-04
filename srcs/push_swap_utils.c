@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:23:23 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/03 02:51:23 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/04 06:50:59 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,17 @@
 // 	return (bit_count);
 // }
 
-static int digit_counter(int value, int n_base)
+static int	digit_counter(int value, int n_base)
 {
-    int digit_count;
+	int	digit_count;
 
-    digit_count = 0;
-    while (value != 0)
-    {
-        value = value / n_base;
-        digit_count++;
-    }
-    return digit_count;
+	digit_count = 0;
+	while (value != 0)
+	{
+		value = value / n_base;
+		digit_count++;
+	}
+	return (digit_count);
 }
 
 t_n_base	*init_n_base_data(int n_base, int maxsize)
@@ -55,9 +55,7 @@ t_n_base	*init_n_base_data(int n_base, int maxsize)
 
 	data = (t_n_base *)malloc(sizeof(t_n_base));
 	data->base = n_base;
-	//data->mask = ipow(2, n_base) - 1;
 	data->mask = n_base - 1;
-	//data->largest_digit = ipow(2, n_base) - 1;
 	data->largest_digit = n_base - 1;
 	data->dgt_count = digit_counter(maxsize, n_base);
 	return (data);
@@ -73,20 +71,29 @@ int	head(t_array *stack, int d)
 	return (stack->a[stack->l - 1 - d]);
 }
 
+
 t_stacks	*init_stacks(t_array *a_map, int size)
 {
 	t_stacks	*stacks;
 
 	stacks = (t_stacks *)malloc(sizeof(t_stacks));
+	if (stacks == NULL)
+		return (NULL);
 	stacks->a = ft_arrclone(a_map);
+	if (stacks->a == NULL)
+		return (free_stacks(stacks), NULL);
 	stacks->b = ft_arrnew(size);
+	if (stacks->b == NULL)
+		return (free_stacks(stacks), NULL);
 	stacks->map = NULL;
 	return (stacks);
 }
 
 void	free_stacks(t_stacks *stacks)
 {
-	ft_arrfree(stacks->a);
-	ft_arrfree(stacks->b);
+	if (stacks->a)
+		ft_arrfree(stacks->a);
+	if (stacks->b)
+		ft_arrfree(stacks->b);
 	free(stacks);
 }
