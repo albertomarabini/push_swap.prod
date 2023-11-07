@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:23:23 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/07 10:30:31 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/05 04:59:33 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int	head(t_array *stack, int d)
 		return (-1);
 	return (stack->a[stack->l - 1 - d]);
 }
+
 
 t_stacks	*init_stacks(t_array *a_map, int size)
 {

@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 01:40:27 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/07 14:06:39 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/06 16:43:41 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	main(void)
 	printArray("\nmap\n", map->a, size);
 	printArray("\nnorm\n", stks->a->a, size);
 	total_moves = 0;
-	n_base = init_n_base_data(4, size - 1);
+	n_base = init_n_base_data(3, size - 1);
 	if (size <= 2 && !ft_arrissorted(stks->a))
 		total_moves = sort_smallest_map(stks->a);
 	else if (size <= 10 && !ft_arrissorted(stks->a))

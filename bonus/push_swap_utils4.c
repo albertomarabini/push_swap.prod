@@ -5,119 +5,80 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/04 09:41:02 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/04 07:20:37 by amarabin         ###   ########.fr       */
+/*   Created: 2023/11/05 05:01:10 by amarabin          #+#    #+#             */
+/*   Updated: 2023/11/05 05:38:16 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker_bonus.h"
 
-void	free_matrix(char **res)
-{
-	size_t	i;
 
-	if (!res)
-		return ;
-	i = 0;
-	while (res[i])
-		free(res[i++]);
-	free(res);
+/**
+ * Implements the 's' instruction
+ *
+ * @param a pointer to the first integer (head of the first stack)
+ * @param b pointer to the second integer (head of the second stack)
+ * @param label The label of the stack.
+ */
+int	s(t_array *stack)
+{
+	int	temp;
+
+	temp = stack->a[stack->l - 1];
+	stack->a[stack->l - 1] = stack->a[stack->l - 2];
+	stack->a[stack->l - 2] = temp;
+	return (1);
 }
 
 /**
- * Allocates a new string and fills it with characters between
- * pointers s and p.
+ * Implements the 'ss' instruction
+ *
+ * @param a pointer to the first integer (head of the first stack)
+ * @param b pointer to the second integer (head of the second stack)
+ * @param label The label of the stack.
  */
-static char	*get_between(char const *p, const char *s)
+int	ss(t_array *stack_a, t_array *stack_b)
 {
-	char	*word;
-	size_t	i;
-
-	word = (char *)malloc((s - p + 1) * sizeof(char));
-	if (!word)
-		return (NULL);
-	i = 0;
-	while (p < s)
-	{
-		word[i] = *p;
-		p++;
-		i++;
-	}
-	word[i] = '\0';
-	return (word);
+	s(stack_a);
+    s(stack_b);
+	return (1);
 }
 
 /**
- * Generate a matrix to hold split words.
+ * Implements the 'r' instruction
+ *
+ * @param stack The stack to be rotated.
+ * @param label The label of the stack.
  */
-static char	**generate_matrix(char const *s, char c)
+int	r(t_array *stack)
 {
-	char	**res;
-	size_t	word_count;
-
-	word_count = 0;
-	while (*s)
-	{
-		if (*s == c)
-			s++;
-		else
-		{
-			word_count++;
-			while (*s && *s != c)
-				s++;
-		}
-	}
-	res = (char **)malloc((word_count + 1) * sizeof(char *));
-	if (!res)
-		return (NULL);
-	res[word_count] = NULL;
-	return (res);
+	ft_arrshftr(stack);
+	return (1);
 }
 
 /**
- * Iterates through the string s, extracts words separated by
- * the character c, and fills the array res with these words.
+ * Implements the 'rr' instruction
+ *
+ * @param stack_a The stack to be rotated.
+ * @param stack_b The stack to be rotated.
+ * @param label The label of the stack.
  */
-static char	**fill_matrix(char const *s, char **res, char c)
+int	r_all(t_array *stack_a, t_array *stack_b)
 {
-	const char	*p;
-	size_t		i;
-
-	i = 0;
-	while (*s)
-	{
-		if (*s != c)
-		{
-			p = s;
-			while (*s && *s != c)
-				s++;
-			res[i] = get_between(p, s);
-			if (!res[i])
-			{
-				free_matrix(res);
-				return (NULL);
-			}
-			i++;
-		}
-		else
-			s++;
-	}
-	return (res);
+	ft_arrshftr(stack_a);
+	ft_arrshftr(stack_b);
+	return (1);
 }
 
 /**
- * Takes an input string s and a character c, and returns
- * a newly-allocated array of strings representing the words in s
- * separated by c.
+ * Implements the 'rr' instruction
+ *
+ * @param stack The stack to be rotated.
+ * @param label The label of the stack.
  */
-char	**ft_split(char const *s, char c)
+int	rr(t_array *stack)
 {
-	char	**res;
-
-	if (!s)
-		return (NULL);
-	res = generate_matrix(s, c);
-	if (!res)
-		return (NULL);
-	return (fill_matrix(s, res, c));
+	ft_arrshftl(stack);
+	return (1);
 }
+

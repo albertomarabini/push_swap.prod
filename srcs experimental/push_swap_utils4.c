@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 09:41:02 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/07 11:06:41 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/04 01:16:24 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ static char	**generate_matrix(char const *s, char c)
 {
 	char	**res;
 	size_t	word_count;
-	int		i;
 
 	word_count = 0;
 	while (*s)
@@ -71,9 +70,6 @@ static char	**generate_matrix(char const *s, char c)
 	res = (char **)malloc((word_count + 1) * sizeof(char *));
 	if (!res)
 		return (NULL);
-	i = 0;
-	while (i < (int)word_count)
-		res[i++] = NULL;
 	res[word_count] = NULL;
 	return (res);
 }

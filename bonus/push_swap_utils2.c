@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap_utils4.c                                 :+:      :+:    :+:   */
+/*   push_swap_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 09:41:02 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/07 11:06:41 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/05 10:15:32 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "checker_bonus.h"
 
-void	free_matrix(char **res)
+static void	free_matrix(char **res)
 {
 	size_t	i;
 
@@ -54,7 +54,6 @@ static char	**generate_matrix(char const *s, char c)
 {
 	char	**res;
 	size_t	word_count;
-	int		i;
 
 	word_count = 0;
 	while (*s)
@@ -71,9 +70,6 @@ static char	**generate_matrix(char const *s, char c)
 	res = (char **)malloc((word_count + 1) * sizeof(char *));
 	if (!res)
 		return (NULL);
-	i = 0;
-	while (i < (int)word_count)
-		res[i++] = NULL;
 	res[word_count] = NULL;
 	return (res);
 }

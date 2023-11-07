@@ -6,11 +6,11 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/01 01:58:22 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/04 07:20:25 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/02 14:05:09 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker_bonus.h"
+#include "push_swap.h"
 
 t_array	*ft_iarrsort(t_array *array, int desc)
 {

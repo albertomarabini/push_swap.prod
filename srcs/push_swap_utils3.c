@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 01:58:41 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/04 07:08:52 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/07 11:07:55 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,14 @@ static int	ft_atoi_mod(char *nptr)
 	return ((int)result);
 }
 
-static void	ft_free_split(char **vals, int size)
+void	ft_free_split(char **vals, int size)
 {
 	while (size >= 0)
-		free(vals[size--]);
+	{
+		if (vals[size])
+			free(vals[size]);
+		size --;
+	}
 	free(vals);
 }
 
@@ -85,18 +89,24 @@ static int	*populate_input_array(char **vals, int size)
 int	*parse_input(int *argc, char *argv[])
 {
 	int		*result;
+	char	*buffer;
 	char	**vals;
 
 	if (*argc < 2)
 		return (NULL);
-	vals = ft_split(concat_argc(argv, *argc), ' ');
-	if (!vals)
+	buffer = concat_argc(argv, *argc);
+	if (!buffer)
 		return (NULL);
+	vals = ft_split(buffer, ' ');
+	if (!vals)
+		return (free(buffer), NULL);
+	free(buffer);
 	*argc = 0;
 	while (vals[*argc])
 		(*argc)++;
 	result = populate_input_array(vals, *argc);
+	ft_free_split(vals, *argc);
 	if (!result)
-		return (ft_free_split(vals, *argc), NULL);
+		return (NULL);
 	return (result);
 }

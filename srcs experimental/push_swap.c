@@ -6,7 +6,7 @@
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 01:47:57 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/08 00:47:28 by amarabin         ###   ########.fr       */
+/*   Updated: 2023/11/08 00:48:05 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	main(int size, char *argv[])
 	t_stacks	*stks;
 	t_n_base	*n_base;
 
-	if (size == 1)
+	if (size < 2)
 		return (0);
 	input = parse_input(&size, argv);
 	if (!input)
@@ -79,5 +79,5 @@ int	main(int size, char *argv[])
 		n_binary_radix_sort(stks, n_base, size);
 	return (free_main(input, map, stks, n_base));
 
-	//COMPILE!!!
+	//compile
 }

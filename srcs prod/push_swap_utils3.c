@@ -1,38 +1,63 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   checker_utils_bonus.c                              :+:      :+:    :+:   */
+/*   push_swap_utils3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amarabin <amarabin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/08 21:09:59 by amarabin          #+#    #+#             */
-/*   Updated: 2023/11/05 10:49:15 by amarabin         ###   ########.fr       */
+/*   Created: 2023/11/04 01:58:41 by amarabin          #+#    #+#             */
+/*   Updated: 2023/11/04 07:08:52 by amarabin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker_bonus.h"
+#include "push_swap.h"
 
-int	init_stacks(t_stacks *stacks, t_array a_map, int size)
+/**
+ * Converts a string representation of an integer to an integer value.
+ *
+ * The function parses the input string `nptr` and converts it to an integer.
+ * If an error condition occurs, the first character of the input string is
+ * modified to 'E' and 0 is returned.
+ *
+ * @param nptr The string to convert to an integer.
+ * @return The converted integer value if successful, 0 if an error occurs.
+ */
+static int	ft_atoi_mod(char *nptr)
 {
-	stacks->a = ft_arrclone(&a_map);
-	if (stacks->a == NULL)
-		return (free_stacks(*stacks), 0);
-	stacks->b = ft_arrnew(size);
-	if (stacks->b == NULL)
-		return (free_stacks(*stacks), 0);
-	stacks->map = NULL;
-	return (1);
+	int			sign;
+	long long	result;
+	int			i;
+
+	sign = 1;
+	result = 0;
+	i = 0;
+	if (!nptr)
+		return (0);
+	if (nptr[0] == '-' || nptr[0] == '+')
+	{
+		if (nptr[0] == '-')
+			sign = -1;
+		i++;
+	}
+	while (nptr[i] >= '0' && nptr[i] <= '9')
+		result = (result * 10) + (nptr[i++] - '0');
+	result *= sign;
+	if (nptr[i] != '\0' || result > INT_MAX || result < INT_MIN)
+	{
+		nptr[0] = 'E';
+		return (0);
+	}
+	return ((int)result);
 }
 
-void	free_stacks(t_stacks stacks)
+static void	ft_free_split(char **vals, int size)
 {
-	if (stacks.a)
-		ft_arrfree(stacks.a);
-	if (stacks.b)
-		ft_arrfree(stacks.b);
+	while (size >= 0)
+		free(vals[size--]);
+	free(vals);
 }
 
-int	*populate_input_array(char **vals, int size)
+static int	*populate_input_array(char **vals, int size)
 {
 	int	*result;
 	int	result_size;
@@ -74,29 +99,4 @@ int	*parse_input(int *argc, char *argv[])
 	if (!result)
 		return (ft_free_split(vals, *argc), NULL);
 	return (result);
-}
-
-int	apply_operation(t_stacks stack, char *operation)
-{
-	if (!ft_strcmp(operation, "sa"))
-		return (s(stack.a));
-	else if (!ft_strcmp(operation, "sb"))
-		return (s(stack.b));
-	else if (!ft_strcmp(operation, "ra"))
-		return (r(stack.a));
-	else if (!ft_strcmp(operation, "rb"))
-		return (r(stack.b));
-	else if (!ft_strcmp(operation, "rra"))
-		return (rr(stack.a));
-	else if (!ft_strcmp(operation, "rrb"))
-		return (rr(stack.b));
-	else if (!ft_strcmp(operation, "pb"))
-		return (p(stack.b, stack.a));
-	else if (!ft_strcmp(operation, "pa"))
-		return (p(stack.a, stack.b));
-	else if (!ft_strcmp(operation, "rrr"))
-		return (rrr(stack.a, stack.b));
-	else if (!ft_strcmp(operation, "rr"))
-		return (r_all(stack.a, stack.b));
-	return (0);
 }
